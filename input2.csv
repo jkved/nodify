@@ -1,5 +1,11 @@
-database|table|column|type|title
-DB||||Database name
-|TBL|||Table name
-||COL1|integer|Column 1
-||COL2|string|Column 2
+database>>>table>>>column>>>type>>>title
+ DB1 >>> >>> Database name dBASE
+>>>TBL1>>>>>>Table name tABLE
+>>>>>>COL1>>>integer >>>Column 1
+>>> >>> COL2>>> string>>>Column 2
+>>> >>> COL3>>> string>>>Column 3
+>>> >>> COL4>>> integer>>>Column 4
+ DB2 >>> >>> Database name DATABOID
+>>>TBL2>>>>>>Table name TABLOID
+>>>>>>COL1>>>string >>>Column 1
+>>> >>> COL2>>> string>>>Column 2

@@ -1,0 +1,4 @@
+DB|   |      |       |Database name
+  |TBL|      |       | Table name  
+  |   | COL1 |integer|  Column 1   
+  |   |CO&L2"|string |  Column 2   

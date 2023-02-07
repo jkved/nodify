@@ -1,3 +1,4 @@
+from ast import Try
 from multipledispatch import dispatch
 from pathlib import Path
 from functools import partial
@@ -5,40 +6,46 @@ import argparse
 import sys
 
 # Method for input argument processing if initial data is passed by path to file
-def argument_input():
-    parser = argparse.ArgumentParser(prog="templateIO",
-                                     description="This program reads an SQL-type data structure from a file or as pipeline input. After that, the code prints it in command line or output file.\nFor file input use optional argument -f.\nFor stream input use like this: \"cat txt.txt | py main.py\"."
-                                     )
-    parser.add_argument('flow',
-                        nargs="?",
-                        help="see description for input types",
-                        type=argparse.FileType('r'),
-                        default=(None if sys.stdin.isatty() else sys.stdin)
-                        )
-    parser.add_argument("-f",
-                        "--filepath",
-                        action="store",
-                        help="path to file containing input table",
-                        default=None,
-                        metavar="")
-    parser.add_argument("-o",
-                        "--output", 
-                        action="store", 
-                        help="name of the file for output to be printed",
-                        metavar="",
-                        default=None)
-    parser.add_argument("-d",
-                        "--delimiter",
-                        help="sets the default delimiter for imported data structure (current - \",\"), must be passed in between \"\"",
-                        metavar="",
-                        default="|")
+def argument_input(newArgs, test_mode=False):
+    if not test_mode:
+        parser = argparse.ArgumentParser(prog="templateIO",
+                                         description="This program reads an SQL-type data structure from a file or as pipeline input. After that, the code prints it in command line or output file.\nFor file input use optional argument -f.\nFor stream input use like this: \"cat txt.txt | py main.py\"."
+                                         )
+        parser.add_argument('flow',
+                            nargs="?",
+                            help="see description for input types",
+                            type=argparse.FileType('r'),
+                            default=(None if sys.stdin.isatty() else sys.stdin)
+                            )
+        parser.add_argument("-f",
+                            "--filepath",
+                            action="store",
+                            help="path to file containing input table",
+                            default=None,
+                            metavar="")
+        parser.add_argument("-o",
+                            "--output", 
+                            action="store", 
+                            help="name of the file for output to be printed",
+                            metavar="",
+                            default=None)
+        parser.add_argument("-d",
+                            "--delimiter",
+                            help="sets the default delimiter for imported data structure (current - \",\"), must be passed in between \"\"",
+                            metavar="",
+                            default="|")
 
-    args = parser.parse_args()
+        args = parser.parse_args()
+    else:
+        args = newArgs
     if args.flow == None:
-        target_file = Path(args.filepath)
-
+        try:
+            target_file = Path(args.filepath)
+        except:
+            print("Filepath value not assigned. Try using -f \"filepath\"")
+            raise SystemExit(1)
         if not target_file.exists():
-            print("Error: Input file does not exist")
+            print("Input file does not exist. Provide a valid input file")
             raise SystemExit(1)
 
     return args
@@ -125,12 +132,12 @@ class restruct:
 
     # In case wrong delimiter is selected
     def determine_delimiter(self, header) -> str:
-        try_delims = [",", "|", "\t", "."]
+        try_delims = [",", "|", "." "\t", "_", " "]
         for delim in try_delims:
             if len(header.split(delim)) >= 3:
                 print("Delimiter has been changed from \""+self.delimiter+"\" to \""+delim+"\".")
                 return delim
-        print("No appropriate delimiter has been selected or found.")
+        print("No appropriate delimiter has been selected or found. Try setting it with -d \"delim\"")
         raise SystemExit(1)
 
     # Main algorithm to restructure input data to node-type objects
@@ -143,7 +150,7 @@ class restruct:
 
         # Making sure that data goes first instead of header and that correct delimiter was chosen
         header = self.input_method(filename)
-        if len(header.split(self.delimiter)) < 3: # in the least delimiter case (for database), at least three values are present
+        if len(header.split(self.delimiter)) < 3: # in the least delimiter counts case (for database), at least three values are present
             self.delimiter = self.determine_delimiter(header)
 
         if all(header.split(self.delimiter)) != "":
