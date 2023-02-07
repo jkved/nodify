@@ -4,7 +4,7 @@ Algorithm to import table of SQL-type info and restructure it to node-like objec
 This program is designed to be a command-line input Python code to process the SQL-type data table and convert it to objects which represent nodes. The table is of the following form:
 
  database | table | column | type    | title <br />
- DB&emsp                        |         | Database name <br />
+ DB\t                        |         | Database name <br />
           | TBL            |         | Table name <br />
           |       | COL1   | integer | Column 1 <br />
           |       | COL2   | string  | Column 2 <br />
