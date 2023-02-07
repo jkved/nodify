@@ -8,7 +8,7 @@ DB                        |         | Database name
          | TBL            |         | Table name
          |       | COL1   | integer | Column 1
          |       | COL2   | string  | Column 2
-         
+
 The code is made of a few principal parts:
 
 It takes optional arguments for the code using argparse library. Optional arguments are delimiter form, filepath or output file. In addition to that, it is possible to pass the input file by stream (pipeline) to the script. Consider the following CL imput:
