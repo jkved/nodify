@@ -132,7 +132,7 @@ class restruct:
 
     # In case wrong delimiter is selected
     def determine_delimiter(self, header) -> str:
-        try_delims = [",", "|", "." "\t", "_", " "]
+        try_delims = [",", "|", "." "\t", "_"]
         for delim in try_delims:
             if len(header.split(delim)) >= 3:
                 print("Delimiter has been changed from \""+self.delimiter+"\" to \""+delim+"\".")
